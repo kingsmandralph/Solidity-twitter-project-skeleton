@@ -32,6 +32,7 @@ contract Twitter {
     uint256 public nextMessageId;
     // ----- END OF DO-NOT-EDIT ----- //
 
+    // ----- START OF QUEST 1 ----- //
     function registerAccount(string calldata _name) external {
         //check for empty string input
         require(bytes(_name).length > 0, "Name cannot be an empty string");
@@ -68,7 +69,9 @@ contract Twitter {
         require(currUserBytesStr.length != 0, "This wallet does not belong to any account.");
         _;
     }
+    // ----- END OF QUEST 1 ----- //
 
+    // ----- START OF QUEST 2 ----- //
     function followUser(address _user) external accountExists(_user) accountExists(msg.sender) {
         User storage functionCaller = users[msg.sender];
         functionCaller.following.push(_user);
@@ -137,6 +140,19 @@ contract Twitter {
         }
         return _users.length;
     }
+    
+    function retweet(uint tweetId) public {
+    // Check that the tweet exists
+    require(tweets[tweetId].tweetId != 0, "Tweet does not exist");
+    // Check that the user is not retweeting their own tweet
+    require(tweets[tweetId].author != msg.sender, "Cannot retweet your own tweet");
+    // Create a new tweet with the same content and author as the original tweet
+    tweets[nextTweetId] = Tweet(nextTweetId, tweets[tweetId].author, tweets[tweetId].content, block.timestamp);
+    // Add the new tweet to the user's tweets array
+    users[msg.sender].userTweets.push(nextTweetId);
+    // Increment the next tweet id
+    nextTweetId++;
+}
 
     function likeTweet(uint _tweetId) external accountExists(msg.sender) {
         // Get the tweet being liked
