@@ -1,2 +1,1 @@
-# Solidity-twitter-project-skeleton
-Twitter solidity smart contract
+# solidity-twitter-project-skeleton
